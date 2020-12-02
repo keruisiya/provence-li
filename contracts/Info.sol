@@ -1,16 +1,17 @@
-pragma solidity ^0.4.17;
-// import './ownable.sol';
+pragma solidity ^0.4.19;
+import './Account.sol';
 
-contract Info{
-    // 生成随机，用来取余数得
-    uint modulus = 10 ** 16;
+contract Info is Account{
 
-    // 身份字符串；
-    string PRODUCE = 'produce';
-    string MILKING = 'milking';
-    string PROCESS = 'process';
-    string STOREEXPRESS ='storeExpress';
-    string SELL = 'sell';
+    //--------------- 打算的account.sol
+
+    //--------------- 打算的account.sol
+
+    //--------------- 打算的Utils.sol
+
+    
+    //--------------- 打算的Utils.sol
+
 
     // 生产商部分数据的上链和获取
     struct ProduceInfo{
@@ -88,43 +89,6 @@ contract Info{
         string produDate;
     }
 
-    // 考虑是否需要这个结构？
-    // 生产商集合
-    address[] public produceArr;
-    // jinai厂集合
-    address[] public milkingArr;
-    // 加工厂集合
-    address[] public processArr;
-    // 存储与物流集合
-    address[] public storeExpressArr;
-    // 销售商集合
-    address[] public sellArr;
-
-    struct Member{
-        string identity;
-        bool isVaild;
-    }
-
-    // 地址和对应的身份   0x123456 ===> 'produce' 
-    mapping(address => Member) private addressToIdentity;
-    // 给一个账户地址设定一个身份------**这个和后续准入机制有关**
-    function setIdentity(address _address, string _str) public {
-        require(!addressToIdentity[_address].isVaild);
-        addressToIdentity[_address].identity = _str;
-        addressToIdentity[_address].isVaild = true;
-        if(isStrEqual(_str,PRODUCE)){
-            produceArr.push(_address);
-        }else if(isStrEqual(_str,MILKING)){
-            milkingArr.push(_address);
-        }else if(isStrEqual(_str,PROCESS)){
-            processArr.push(_address);
-        }else if(isStrEqual(_str,STOREEXPRESS)){
-            storeExpressArr.push(_address);
-        }else if(isStrEqual(_str,SELL)){
-            sellArr.push(_address);
-        }
-    }
-
     // id与对应得 上传溯源信息；
     // 各身份得id数组；
     mapping(uint => ProduceInfo) public idToProduce;
@@ -152,12 +116,6 @@ contract Info{
 
     // 有咩有办法合成一个方法 上传数据得方法
     
-    //基于当前时间生成一个id；
-    function _createId() private view returns(uint){
-        uint rand = uint(keccak256(now));
-        return rand % modulus;
-    }
-
     // 设置生产者信息
     function _setProduceInfo(string _farmsID, string _farmsName, string _farmsAdd, string _cowVar, string _cowSource, string _feedAqu, string _feedName) public {
         require(isStrEqual(addressToIdentity[msg.sender].identity, PRODUCE));
@@ -209,8 +167,4 @@ contract Info{
         SellDateAdded(_sellCode, _sellName, _sellTime, _sellAddr, _produDate);
     }
     
-    // 判断字符串是否相等
-    function isStrEqual(string _str1, string _str2)  public pure  returns(bool){
-       return keccak256(_str1) == keccak256(_str2);
-    }
 }

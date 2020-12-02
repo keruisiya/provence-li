@@ -5,7 +5,7 @@ import App from './App'
 import Web3 from 'web3'
 import router from './router'
 import './css/init.scss'
-import { Button, Select, Form, FormItem, Input, Option, Col, Row, Radio, RadioGroup, DatePicker, TimePicker, Switch, Checkbox, CheckboxGroup } from 'element-ui'
+import { Button, Select, Form, FormItem, Input, Option, Col, Row, Radio, RadioGroup, DatePicker, TimePicker, Switch, Checkbox, CheckboxGroup, Table, TableColumn, Popover, Icon, Alert, Message, MessageBox, Steps, Step, Divider } from 'element-ui'
 
 Vue.config.productionTip = false
 
@@ -24,7 +24,18 @@ Vue.use(TimePicker)
 Vue.use(Switch)
 Vue.use(Checkbox)
 Vue.use(CheckboxGroup)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Popover)
+Vue.use(Icon)
+Vue.use(Alert)
+Vue.use(Steps)
+Vue.use(Step)
+Vue.use(Divider)
+Vue.prototype.$message = Message
 
+// 页面中使用的时候就是  this.$msgbox.alert
+Vue.prototype.$msgbox = MessageBox
 window.addEventListener('load', async () => {
   // 考虑到新版的Metamask，并且默认启用了隐私模式
   // https://blog.csdn.net/rejames/article/details/89876967

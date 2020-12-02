@@ -1,5 +1,5 @@
 <template>
-  <div id="account">
+  <div>
     <h1>{{ msg }}</h1>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-suffix=":" label-width="100px" class="demo-ruleForm">
       <el-form-item label="账户地址" prop="address">
@@ -14,16 +14,29 @@
           <el-option label="销售阶段" value="sell"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="申请日期" prop="date" >
+        <el-date-picker
+          style="float:left"
+          v-model="ruleForm.date"
+          align="right"
+          type="date"
+          placeholder="选择日期"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+          :picker-options="pickerOptions">
+        </el-date-picker>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')" style="float:left">申请</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
-
-    <hr/>
-    <div>
-      当前账户地址：{{ currentAccount }}
-    </div>
+    <el-divider><i class="el-icon-mobile-phone"></i></el-divider>
+    <el-steps :space="200" :active="applyStatus" finish-status="success" align-center style="margin-left:-50px">
+      <el-step title="申请中"></el-step>
+      <el-step title="审核中"></el-step>
+      <el-step title="审核通过"></el-step>
+    </el-steps>    
   </div>
 </template>
 
@@ -37,7 +50,8 @@ export default {
       msg: '账户的身份设定',
       ruleForm: {
         address: '',
-        identity: ''
+        identity: '',
+        date: ''
       },
       rules: {
         address: [
@@ -52,35 +66,39 @@ export default {
         ],
         identity: [
           { required: true, message: '请选择对应参与阶段', trigger: 'change' }
+        ],
+        date: [
+          { required: true, message: '请选择申请日期', trigger: 'change' }
         ]
       },
-      currentAccount: '12121'
+      // 设置日期选择器不可以选中的 日子
+      pickerOptions: {
+        disabledDate (time) {
+          return time.getTime() < Date.now()
+        }
+      },
+      applyStatus: 1
     }
   },
   computed: {
-  },
-  beforeCreate: function () {
-    console.log(window.web3.eth.accounts[9])
-    Info.init()
-  },
-  mounted () {
-    this.currentAccount = window.web3.eth.coinbase
-
-    // this.currentAccount = window.metamask.eth.coinbase
   },
   methods: {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.$message({
+            message: '账户身份提交成功，等待审核',
+            type: 'success'
+          })
+          this.applyStatus = 2
           Info.setIdentity(this.ruleForm.address, this.ruleForm.identity).then(function (res) {
             console.log(res)
           }, function (err) {
+            // 可能有账户已经注册过的。----不会发生这种情况
             console.log(err)
           })
-          // window.web3.eth.coinbase.send
-          // alert('submit!')
         } else {
-          console.log('error submit!!')
+          this.$message.error('请确认是否所有信息输入完整！')
           return false
         }
       })
@@ -93,12 +111,4 @@ export default {
 </script>
 
 <style scoped>
-#account{
-  width: 500px;
-  margin:0 auto;
-}
-.label{
-  font-size:20px;
-}
-
 </style>
