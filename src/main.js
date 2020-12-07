@@ -4,8 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import Web3 from 'web3'
 import router from './router'
+import store from './store'
+
 import './css/init.scss'
-import { Button, Select, Form, FormItem, Input, Option, Col, Row, Radio, RadioGroup, DatePicker, TimePicker, Switch, Checkbox, CheckboxGroup, Table, TableColumn, Popover, Icon, Alert, Message, MessageBox, Steps, Step, Divider } from 'element-ui'
+import './assets/icon/iconfont.css'
+
+import { Button, Select, Form, FormItem, Input, Option, Col, Row, Radio, RadioGroup, DatePicker, TimePicker, Switch, Checkbox, CheckboxGroup, Table, TableColumn, Popover, Icon, Alert, Message, MessageBox, Steps, Step, Divider, Tabs, TabPane, Menu, MenuItem, Submenu, MenuItemGroup, Container, Aside, Main, Header, Avatar, RadioButton, Drawer } from 'element-ui'
 
 Vue.config.productionTip = false
 
@@ -32,6 +36,19 @@ Vue.use(Alert)
 Vue.use(Steps)
 Vue.use(Step)
 Vue.use(Divider)
+Vue.use(Tabs)
+Vue.use(TabPane)
+Vue.use(Menu)
+Vue.use(MenuItem)
+Vue.use(Submenu)
+Vue.use(MenuItemGroup)
+Vue.use(Container)
+Vue.use(Aside)
+Vue.use(Main)
+Vue.use(Header)
+Vue.use(Avatar)
+Vue.use(RadioButton)
+Vue.use(Drawer)
 Vue.prototype.$message = Message
 
 // 页面中使用的时候就是  this.$msgbox.alert
@@ -79,6 +96,7 @@ window.addEventListener('load', async () => {
   new Vue({
     el: '#app',
     router,
+    store,
     template: '<App/>',
     components: { App }
   })

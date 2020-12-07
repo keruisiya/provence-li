@@ -1,154 +1,42 @@
-<!--
-日后扩展等等想法
-      table的参数：
-        :data===表格中的数据               -----------1
-        border===表格外围的边框             ----------1
-        stripe===带斑马纹路的 表格
-        row-class-name====给表格 行 加颜色 ---'warning-row' -----------1
-        height==== 可以起到固定表头的作用； ----------1
-        max-height属性为 Table 指定最大高度。此时若表格所需的高度大于最大高度，则会显示一个滚动条。--------1
-        highlight-current-row 配合 current-change事件 实现 单选操作
-        加一个type =  selection  实现多选   --------1 
-      table-column的参数：
-        prop：表头的标识         -----------1
-        label：表头的名称         ----------1
-        width：宽度             ----------1
-        fixed属性，它接受 Boolean 值或者leftright，表示左边固定还是右边固定。 ------1
-        type=index 是帮助 形成索引号列的 -------------1 
-        show-overflow-tooltip ----单行溢出隐藏 ----------1
-
-        要加搜索功能
-
-      slot-scope  可以使用 scope.row.name ---获取表格中每列的数据 data
-      设置 type="expand" 和 Scoped slot 可以开启展开行功能 ----可以达到展开数据的效果
-    -->
 <template>
-  <el-table
-    ref="singleTable"
-    style="width: 1235px"
-    :data="tableData.filter(data => !search || data.identity.toLowerCase().includes(search.toLowerCase()) || data.address.toLowerCase().includes(search.toLowerCase()))"
-    :border="false"
-    :row-class-name="tableRowClassName"
-    max-height="600px" 
-    >
-    <el-table-column
-      type="selection"
-      width="55">
-    </el-table-column>
-    <el-table-column
-      type="index"
-      label="序号"
-      width="80">
-    </el-table-column>
-    <el-table-column
-      property="date"
-      label="日期"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      property="address"
-      label="账户"
-      width="390">
-    </el-table-column>
-    <el-table-column
-      property="identity"
-      label="参与阶段"
-      width="200"
-    >
-    </el-table-column>
-    <el-table-column
-      align="center"
-    >
-      <template slot="header" slot-scope="scope">
-        <el-input
-          v-model="search"
-          size="medium"
-          placeholder="输入关键字搜索"/>
-      </template>
-      <template slot-scope="scope">
-        <el-button
-          size="mini"
-          @click="handleLook(scope.$index, scope.row)">查看</el-button>
-        <el-button
-          size="mini"
-          type="danger"
-          @click="handleOption(scope.$index, scope.row)">操作</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+<div>
+<el-popover
+    placement="top-start"
+    title="标题"
+    width="200"
+    trigger="hover"
+    content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+    <el-button slot="reference">hover 激活</el-button>
+  </el-popover>
+
+  <el-popover
+    placement="bottom"
+    title="标题"
+    width="200"
+    trigger="click"
+    content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+    <el-button slot="reference">click 激活</el-button>
+  </el-popover>
+
+  <el-popover
+    ref="popover"
+    placement="right"
+    title="标题"
+    width="200"
+    trigger="focus"
+    content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+  </el-popover>
+  <el-button v-popover:popover>focus 激活</el-button>
+</div>
+  
 </template>
-<style>
-  .el-table .warning-row {
-    background: oldlace;
-  }
-
-  .el-table .success-row {
-    background: #f0f9eb;
-  }
-
-  .el-table .keruisiya-row {
-    background: #F0FFFF;
-  }
-
-</style>
 
 <script>
   export default {
     data () {
       return {
-        tableData: [{
-          date: '2016-05-02',
-          address: '0xD19bf94161282f94DA8d4e6530e093d1D017a4d5',
-          identity: '生产阶段'
-        }, {
-          date: '2016-05-02',
-          address: '0xD19bf94161fafd94DA8d4e6530e093d1D017a4d5',
-          identity: '存储物流阶段'
-        }, {
-          date: '2016-05-02',
-          address: '0xD19bf94161282f94fgfsd4e6530e093d1D017a4d5',
-          identity: '生产阶段'
-        }, {
-          date: '2016-05-02',
-          address: '0xD19bf941asasdff94DA8d4e6530e093d1D017a4d5',
-          identity: '存储物流阶段'
-        }, {
-          date: '2016-05-02',
-          address: '0xD19fasdfa4161282f94DA8d4e6530e093d1D017a4d5',
-          identity: '生产阶段'
-        }, {
-          date: '2016-05-02',
-          address: '0xD19bf941612fasdfas94DA8d4e6530e093d1D017a4d5',
-          identity: '存储物流阶段'
-        }, {
-          date: '2016-05-02',
-          address: '0xD19bf9414DA8d4e6530e093d1D017a4d5',
-          identity: '生产阶段'
-        }, {
-          date: '2016-05-02',
-          address: '0xD19bf941612d4e6530e093d1D017a4d5',
-          identity: '存储物流阶段'
-        }],
-        search: ''
-      }
-    },
-
-    methods: {
-      tableRowClassName ({row, rowIndex}) {
-        if (rowIndex % 3 === 0) {
-          return 'warning-row'
-        } else if (rowIndex % 3 === 1) {
-          return 'success-row'
-        }
-        return 'keruisiya-row'
-      },
-      handleLook (index, row) {
-        console.log(index, row)
-      },
-      handleOption (index, row) {
-        console.log(index, row)
+        visible: false
       }
     }
   }
 </script>
-

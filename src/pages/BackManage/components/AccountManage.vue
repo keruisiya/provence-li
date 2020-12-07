@@ -15,7 +15,7 @@ import Info from '@/js/info'
 import ProTable from '@/components/ProTable.vue'
 
 export default {
-  name: 'BackManage',
+  name: 'AccountManage',
   data () {
     return {
       currentAccount: '',
