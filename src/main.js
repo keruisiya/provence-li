@@ -9,7 +9,7 @@ import store from './store'
 import './css/init.scss'
 import './assets/icon/iconfont.css'
 
-import { Button, Select, Form, FormItem, Input, Option, Col, Row, Radio, RadioGroup, DatePicker, TimePicker, Switch, Checkbox, CheckboxGroup, Table, TableColumn, Popover, Icon, Alert, Message, MessageBox, Steps, Step, Divider, Tabs, TabPane, Menu, MenuItem, Submenu, MenuItemGroup, Container, Aside, Main, Header, Avatar, RadioButton, Drawer } from 'element-ui'
+import { Button, Select, Form, FormItem, Input, Option, Col, Row, Radio, RadioGroup, DatePicker, TimePicker, Switch, Checkbox, CheckboxGroup, Table, TableColumn, Popover, Icon, Alert, Message, MessageBox, Steps, Step, Divider, Tabs, TabPane, Menu, MenuItem, Submenu, MenuItemGroup, Container, Aside, Main, Header, Avatar, RadioButton, Drawer, Notification } from 'element-ui'
 
 Vue.config.productionTip = false
 
@@ -50,6 +50,7 @@ Vue.use(Avatar)
 Vue.use(RadioButton)
 Vue.use(Drawer)
 Vue.prototype.$message = Message
+Vue.prototype.$notify = Notification
 
 // 页面中使用的时候就是  this.$msgbox.alert
 Vue.prototype.$msgbox = MessageBox

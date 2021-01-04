@@ -1,12 +1,7 @@
 <template>
-  <div id='wrapper'>
-    <div>
-        当前账户地址：{{ currentAccount }}
-    </div>
-    <keep-alive>
-      <component :is='currentComponent' :currentAccount='currentAccount' :currentIdentity='currentIdentity'> </component>
-    </keep-alive>   
-  </div>
+  <keep-alive>
+    <component :is='currentComponent' :currentAccount='currentAccount' :currentIdentity='currentIdentity'> </component>
+  </keep-alive>   
 </template>
 
 <script>
@@ -34,6 +29,7 @@ export default {
     Info.init().then(() => {
       Info.existAccout(window.web3.eth.coinbase).then((exist) => {
         // 已完成注册的用户
+        console.log(exist)
         if (exist) {
           this.currentComponent = 'Upload'
           Info.getCurrIden(window.web3.eth.coinbase).then((identity) => {
@@ -58,10 +54,6 @@ export default {
 </script>
 
 <style scoped>
-#wrapper{
-  width: 500px;
-  margin:0 auto;
-}
 
 
 

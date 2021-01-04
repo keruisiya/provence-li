@@ -1,8 +1,5 @@
 import contract from 'truffle-contract'
 import InfoContract from '@contracts/Info.json'
-// import OwnableContract from '@contracts/Ownable.json'
-// import UtilsContract from '@contracts/Utils.json'
-// import AccountContract from '@contracts/Account.json'
 
 const Info = {
 
@@ -25,13 +22,13 @@ const Info = {
     })
   },
 
-  // 根据合约 映射结构 addressToIdentity[address] ==Member 结构体中是否有效----因为是public
+  // get---根据合约 映射结构 addressToIdentity[address] ==Member 结构体中是否有效----因为是public
   // Member{ identity , isVaild}
+  // 获取的结构中的  isValid
   existAccout: function (address) {
     let self = this
     return new Promise((resolve, reject) => {
       self.instance.addressToIdentity.call(address).then(res => {
-        // res[1]====放回的是结构体Member 上面的 isVaild
         resolve(res[1])
       }).catch(err => {
         reject(err)
@@ -39,8 +36,9 @@ const Info = {
     })
   },
 
-  // 根据合约 映射结构 addressToIdentity[address]  判断当前 地址的身份
+  // get---根据合约 映射结构 addressToIdentity[address]  判断当前 地址的身份
   // Member{ identity , isVaild}
+  // 获取的是identity
   getCurrIden: function (address) {
     let self = this
     return new Promise((resolve, reject) => {
@@ -53,7 +51,7 @@ const Info = {
     })
   },
 
-  // 调用合约 setIdentity 设定身份。
+  // set---调用合约 setIdentity 设定身份。
   setIdentity: function (address, identity) {
     let self = this
     return new Promise((resolve, reject) => {
@@ -68,7 +66,7 @@ const Info = {
     })
   },
 
-  // 获取参与方地址集合的 数组长度---用于后台展示
+  // get----获取参与方地址集合的 数组长度---用于后台展示
   getIdentityArrLength: function () {
     let self = this
     return new Promise((resolve, reject) => {
@@ -81,7 +79,7 @@ const Info = {
     })
   },
 
-  // 获取其中一个participateArr[id] 的信息---用于后台展示
+  // get---获取其中一个participateArr[id] 的信息---用于后台展示
   getParticipate: function (id) {
     let self = this
     return new Promise((resolve, reject) => {
@@ -93,19 +91,70 @@ const Info = {
       })
     })
   },
+  // 生产方信息上传
+  setProduceInfo: function (farmsID, farmsName, farmsAdd, cowVar, cowSource, feedAqu, feedName) {
+    let self = this
+    return new Promise((resolve, reject) => {
+      self.instance._setProduceInfo(farmsID, farmsName, farmsAdd, cowVar, cowSource, feedAqu, feedName, {from: window.web3.eth.coinbase})
+      .then(tx => {
+        resolve(tx)
+      }).catch(err => {
+        reject(err)
+      })
+    })
+  },
+  // 获取生产信息ID数组的元素；
+  getproduceId: function (id) {
+    let self = this
+    return new Promise((resolve, reject) => {
+      self.instance.produceId.call(id)
+      .then(int => {
+        resolve(int)
+      }).catch(err => {
+        reject(err)
+      })
+    })
+  },
+  // 根据ID查找对应的溯源信息 与mapping的结构有关 idToProduce
+  getProFromID: function (ID) {
+    let self = this
+    return new Promise((resolve, reject) => {
+      self.instance.idToProduce.call(ID)
+      .then(json => {
+        resolve(json)
+      }).catch(err => {
+        reject(err)
+      })
+    })
+  },
+  // 获取生产阶段数据个数；getProlength
+  getProlength: function () {
+    let self = this
+    return new Promise((resolve, reject) => {
+      self.instance.getProlength.call()
+      .then(length => {
+        resolve(length)
+      }).catch(err => {
+        reject(err)
+      })
+    })
+  },
 
-  // 打算不用这个
-  // getIdentity: function (address) {
-  //   let self = this
-  //   return new Promise((resolve, reject) => {
-  //     self.instance.getIdentity.call(address)
-  //     .then(identity => {
-  //       resolve(identity)
-  //     }).catch(err => {
-  //       reject(err)
-  //     })
-  //   })
-  // },
+  // 测市json库是否能用
+  getJson: function () {
+    let self = this
+    return new Promise((resolve, reject) => {
+      self.instance.getJson.call()
+      .then(string => {
+        resolve(string)
+      }).catch(err => {
+        reject(err)
+      })
+    })
+  },
+
+  // -----------------------------------------------------------------------use.sol
+
   exists: function (address) {
     let self = this
 

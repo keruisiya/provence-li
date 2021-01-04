@@ -1,8 +1,7 @@
 <template>
-  <div>
-    <h1>{{ msg }}</h1>
+  <keep-alive>
     <component :is='currentIdentity'></component>
-  </div>
+  </keep-alive>
 </template>
 
 <script>
