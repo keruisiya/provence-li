@@ -51,10 +51,13 @@
 				<el-divider><i class="el-icon-mobile-phone"></i></el-divider>
 			</div>
 			<el-steps :space="200" :active="applyStatus" finish-status="success" align-center>
-				<el-step title="申请中"></el-step>
-				<el-step title="审核中"></el-step>
-				<el-step title="审核通过"></el-step>
+				<el-step title="上传中"></el-step>
+				<el-step title="上传确认"></el-step>
+				<el-step title="已上传"></el-step>
 			</el-steps>
+      <div class="link">
+        <el-link type="primary" :underline="false" href="/#/custom">已有产品ID？去查询</el-link>
+      </div>
     </div>  
   </div>
 </template>
@@ -108,30 +111,30 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$message({
-            message: '上传成功，等待审核',
-            type: 'success'
+          this.applyStatus = 2
+          Info.setProduceInfo(this.ruleForm.farmsID, this.ruleForm.farmsName, this.ruleForm.farmsAdd, this.ruleForm.cowVar, this.ruleForm.cowSource, this.ruleForm.feedAqu, this.ruleForm.feedName).then((res) => {
+            console.log(res)
+            this.applyStatus = 3
+            this.$notify({
+              title: '上传成功',
+              message: '',
+              type: 'success'
+            })
+            // 可以捕获事件----展示id；
+          }).catch((err) => {
+// 为了防止 签名未确认等其他情况。
+            console.log(err)
+            this.$notify.error({
+              title: '出现错误',
+              message: '签名未确认或上传过程中出现了错误，请重试'
+            })
           })
-        } else {
-          this.$message.error('请确认是否所有信息输入完整！')
-          return false
         }
-        // 后续的操作；
-        Info.setProduceInfo(this.ruleForm.farmsID, this.ruleForm.farmsName, this.ruleForm.farmsAdd, this.ruleForm.cowVar, this.ruleForm.cowSource, this.ruleForm.feedAqu, this.ruleForm.feedName).then(function (res) {
-          console.log(res)
-        }, function (err) {
-          console.log(err)
-        })
       })
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
-      // Info.getProData(0).then((res) => {
-      //   console.log(res)
-      // })
-      Info.getStr().then((res) => {
-        console.log(res, 1111)
-      })
+      this.applyStatus = 1
     }
   }
 }
@@ -173,6 +176,10 @@ export default {
 	width:100%;
 	margin:50px 0 36px 0;
 	/* margin:20px auto; */
+}
+.link{
+  width: 360px;
+  margin: 20px auto;
 }
 
 @keyframes mymove {

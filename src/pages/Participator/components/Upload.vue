@@ -36,25 +36,6 @@ export default {
     Sell
   },
   computed: {
-  },
-  methods: {
-    submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$message({
-            message: '上传成功，等待审核',
-            type: 'success'
-          })
-        } else {
-          this.$message.error('请确认是否所有信息输入完整！')
-          return false
-        }
-        // 后续的操作；
-      })
-    },
-    resetForm (formName) {
-      this.$refs[formName].resetFields()
-    }
   }
 }
 </script>

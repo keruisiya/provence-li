@@ -1,49 +1,52 @@
 <template>
-  	<div class="content">
-			<div class="content_input">
-				<div class="title">
-					<p>{{this.msg}}</p>
-				</div>
-				<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-suffix=":" label-width="100px" class="demo-ruleForm">
-					<el-form-item label="账户地址" prop="address">
-						<el-input v-model="ruleForm.address" style="width:369px;float:left"> </el-input>
-					</el-form-item>
-					<el-form-item label="参与阶段" prop="identity" >
-						<el-select v-model="ruleForm.identity" placeholder="请选择对应参与阶段" style="float:left">
-							<el-option label="生产阶段" value="produce"></el-option>
-							<el-option label="挤奶阶段" value="milking"></el-option>
-							<el-option label="加工阶段" value="process"></el-option>
-							<el-option label="存储物流阶段" value="storeExpress"></el-option>
-							<el-option label="销售阶段" value="sell"></el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="申请日期" prop="date" >
-						<el-date-picker
-							style="float:left"
-							v-model="ruleForm.date"
-							align="right"
-							type="date"
-							placeholder="选择日期"
-							format="yyyy-MM-dd"
-							value-format="yyyy-MM-dd"
-							:picker-options="pickerOptions">
-						</el-date-picker>
-					</el-form-item>
-					<el-form-item>
-						<el-button type="primary" @click="submitForm('ruleForm')" style="float:left">申请</el-button>
-						<el-button @click="resetForm('ruleForm')">重置</el-button>
-					</el-form-item>
-				</el-form>
-				<div class="divide">
-					<el-divider><i class="el-icon-mobile-phone"></i></el-divider>
-				</div>
-				<el-steps :space="200" :active="applyStatus" finish-status="success" align-center>
-					<el-step title="申请中"></el-step>
-					<el-step title="审核中"></el-step>
-					<el-step title="审核通过"></el-step>
-				</el-steps>
+  <div class="content">
+		<div class="content_input">
+			<div class="title">
+				<p>{{this.msg}}</p>
 			</div>
+			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-suffix=":" label-width="100px" class="demo-ruleForm">
+				<el-form-item label="账户地址" prop="address">
+					<el-input v-model="ruleForm.address" style="width:369px;float:left" placeholder="请输入账户地址"> </el-input>
+				</el-form-item>
+				<el-form-item label="参与阶段" prop="identity" >
+					<el-select v-model="ruleForm.identity" placeholder="请选择对应参与阶段" style="float:left">
+						<el-option label="生产阶段" value="produce"></el-option>
+						<el-option label="挤奶阶段" value="milking"></el-option>
+						<el-option label="加工阶段" value="process"></el-option>
+						<el-option label="存储物流阶段" value="storeExpress"></el-option>
+						<el-option label="销售阶段" value="sell"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="申请日期" prop="date" >
+					<el-date-picker
+						style="float:left"
+						v-model="ruleForm.date"
+						align="right"
+						type="date"
+						placeholder="选择日期"
+						format="yyyy-MM-dd"
+						value-format="yyyy-MM-dd"
+						:picker-options="pickerOptions">
+					</el-date-picker>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="submitForm('ruleForm')" style="float:left">申请</el-button>
+					<el-button @click="resetForm('ruleForm')">重置</el-button>
+				</el-form-item>
+			</el-form>
+			<div class="divide">
+				<el-divider><i class="el-icon-mobile-phone"></i></el-divider>
+			</div>
+			<el-steps :space="200" :active="applyStatus" finish-status="success" align-center>
+				<el-step title="申请中"></el-step>
+				<el-step title="审核中"></el-step>
+				<el-step title="审核通过"></el-step>
+			</el-steps>
+			<div class="link">
+        <el-link type="primary" :underline="false" href="/#/custom">已有产品ID？去查询</el-link>
+      </div>
 		</div>
+	</div>
 </template>
 
 <script>
@@ -80,7 +83,7 @@ export default {
       // 设置日期选择器不可以选中的 日子
       pickerOptions: {
         disabledDate (time) {
-          return time.getTime() < Date.now()
+          return time.getTime() <= Date.now()
         }
       },
       applyStatus: 1
@@ -92,80 +95,40 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$message({
-            message: '账户身份提交成功，等待审核',
-            type: 'success'
-          })
-          this.applyStatus = 2
-          // **这里要用then要用箭头函数**
-          Info.setIdentity(this.ruleForm.address, this.ruleForm.identity).then((res) => {
-            console.log(res.logs)
-            // 切换到审核通过状态，过两秒自动切换到上传数据界面（这是子组件，切换成upload得组件在participator中）
-            this.applyStatus = 3
+// **这里要用then要用箭头函数**
+          Info.setIdentity(this.ruleForm.address, this.ruleForm.identity, this.ruleForm.date).then((res) => {
+            console.log(res)
+            this.applyStatus = 2
             this.$notify({
               title: '申请成功',
-              message: '刷新页面或等待2s后跳转到溯源数据上传页面',
+              message: '等待管理节点批准',
               type: 'success'
             })
-          }, function (err) {
-            // 可能有账户已经注册过的。----不会发生这种情况
-            // 账户如果注册过是直接转换到数据上传得页面得
-            console.log(err)
-            this.$notify.error({
-              title: '出现错误',
-              message: '申请过程中出现了错误，请稍后重试'
-            })
+          }).catch((err) => {
+            if (err.message === 'WalletMiddleware - Invalid "from" address.') {
+              this.$notify.error({
+                title: '出现错误',
+                message: '您不能为他人账户签名，请重试'
+              })
+            } else {
+// 这个不是捕获 可能有账户已经注册过的 合约上的 require 。
+// 因为 账户如果注册过是直接转换到数据上传得页面得
+// 而是为了防止 签名未确认等其他情况。
+              console.log(err)
+              this.$notify.error({
+                title: '出现错误',
+                message: '签名未确认申请过程中出现了错误，请重试'
+              })
+            }
           })
-        } else {
-          this.$message.error('请确认是否所有信息输入完整！')
-          return false
         }
       })
     },
     resetForm (formName) {
+      // console.log(typeof this.ruleForm.date) // 是一个string类型的--
       this.$refs[formName].resetFields()
-    },
-    test1 () {
-      Info.setProduceInfo('12', 'fad', 'a', 'adf', 'a', 'dfa', 'ad').then(function (res) {
-        console.log(res)    // 这个输出的是交易
-        console.log(res.logs)// 这里会返回相关值
-        for (var i = 0; i < res.logs.length; i++) {
-          var log = res.logs[i]
-          if (log.event === 'ProduceDateAdded') {
-            console.log('from:', log.args._ID.toNumber())
-            // console.log('to:', log.args._to)
-            // console.log('amount:', log.args._value.toNumber())
-            break
-          }
-        }
-      }, function (err) {
-        console.log(err)
-      })
-    },
-    test2 () {
-      // 测试设置生产设信息的部分合约
-      // Info.getproduceId(0).then(function (res) {
-      //   console.log(res)
-      // }, function (err) {
-      //   console.log(err)
-      // })
-      // console.log(Info.instance.produceDateAdded)
-      // Info.getProFromID(3788746011575487).then(function (res) {
-      //   console.log(res)
-      // }, function (err) {
-      //   console.log(err)
-      // })
-
-      // Info.getProlength().then(function (res) {
-      //   console.log(res)
-      // }, function (err) {
-      //   console.log(err)
-      // })
-      Info.getJson().then(function (res) {
-        console.log(res)
-      })
+      this.applyStatus = 1
     }
-
   }
 }
 </script>
@@ -206,6 +169,11 @@ export default {
 	width:100%;
 	margin:50px 0 36px 0;
 	/* margin:20px auto; */
+}
+
+.link{
+  width: 360px;
+  margin: 20px auto;
 }
 
 @keyframes mymove {

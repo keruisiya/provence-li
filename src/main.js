@@ -9,7 +9,7 @@ import store from './store'
 import './css/init.scss'
 import './assets/icon/iconfont.css'
 
-import { Button, Select, Form, FormItem, Input, Option, Col, Row, Radio, RadioGroup, DatePicker, TimePicker, Switch, Checkbox, CheckboxGroup, Table, TableColumn, Popover, Icon, Alert, Message, MessageBox, Steps, Step, Divider, Tabs, TabPane, Menu, MenuItem, Submenu, MenuItemGroup, Container, Aside, Main, Header, Avatar, RadioButton, Drawer, Notification } from 'element-ui'
+import { Button, Select, Form, FormItem, Input, Option, Col, Row, Radio, RadioGroup, DatePicker, TimePicker, Switch, Checkbox, CheckboxGroup, Table, TableColumn, Popover, Icon, Alert, Message, MessageBox, Steps, Step, Divider, Tabs, TabPane, Menu, MenuItem, Submenu, MenuItemGroup, Container, Aside, Main, Header, Avatar, RadioButton, Drawer, Notification, Dialog, Collapse, CollapseItem, Link, PageHeader, Card } from 'element-ui'
 
 Vue.config.productionTip = false
 
@@ -49,6 +49,12 @@ Vue.use(Header)
 Vue.use(Avatar)
 Vue.use(RadioButton)
 Vue.use(Drawer)
+Vue.use(Dialog)
+Vue.use(Collapse)
+Vue.use(CollapseItem)
+Vue.use(Link)
+Vue.use(PageHeader)
+Vue.use(Card)
 Vue.prototype.$message = Message
 Vue.prototype.$notify = Notification
 
@@ -76,7 +82,6 @@ window.addEventListener('load', async () => {
     web3Provider = new Web3.providers.HttpProvider('http://localhost:8545')
   }
   window.web3 = new Web3(web3Provider)
-
   // 自带的方式
   // if (typeof web3 !== 'undefined') {
   //   console.log('Web3 injected browser: OK.')

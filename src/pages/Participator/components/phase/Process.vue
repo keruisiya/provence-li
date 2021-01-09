@@ -19,6 +19,9 @@
         string equiSkil;
     -->
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-suffix=":" label-width="120px" class="demo-ruleForm">
+				<el-form-item label="milk编号" prop="milkId">
+          <el-input v-model="ruleForm.milkId"> </el-input>
+        </el-form-item>
         <el-form-item label="加工地址代号" prop="processAddr">
           <el-input v-model="ruleForm.processAddr"> </el-input>
         </el-form-item>
@@ -46,15 +49,19 @@
 				<el-divider><i class="el-icon-mobile-phone"></i></el-divider>
 			</div>
 			<el-steps :space="200" :active="applyStatus" finish-status="success" align-center>
-				<el-step title="申请中"></el-step>
-				<el-step title="审核中"></el-step>
-				<el-step title="审核通过"></el-step>
+				<el-step title="上传中"></el-step>
+				<el-step title="上传确认"></el-step>
+				<el-step title="已上传"></el-step>
 			</el-steps>
+			<div class="link">
+        <el-link type="primary" :underline="false" href="/#/custom">已有产品ID？去查询</el-link>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import Info from '@/js/info'
 
 export default {
   name: 'Process',
@@ -62,6 +69,7 @@ export default {
     return {
       msg: '加工阶段信息上传',
       ruleForm: {
+        milkId: '',
         processAddr: '',
         processName: '',
         processTime: '',
@@ -70,6 +78,9 @@ export default {
         equiSkil: ''
       },
       rules: {
+        milkId: [
+          { required: true, message: '请输入相应信息', trigger: 'blur' }
+        ],
         processAddr: [
           { required: true, message: '请输入相应信息', trigger: 'blur' }
         ],
@@ -88,28 +99,48 @@ export default {
         equiSkil: [
           { required: true, message: '请输入相应信息', trigger: 'blur' }
         ]
-      }
+      },
+      applyStatus: 1
     }
   },
   computed: {
   },
   methods: {
     submitForm (formName) {
+// 先判断 milkid 是否存在在链上
+// if (Info.isIdExist()) {
+//   this.$message({
+//     message: '产奶阶段id未上链',
+//     type: 'error'
+//   })
+//   return
+// }
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$message({
-            message: '数据上传成功，等待审核',
-            type: 'success'
+          this.applyStatus = 2
+          Info.setProcessInfo(this.ruleForm.milkId, this.ruleForm.processAddr, this.ruleForm.processName, this.ruleForm.processTime, this.ruleForm.balingAddr, this.ruleForm.balingName, this.ruleForm.equiSkil).then((res) => {
+            console.log(res)
+            this.applyStatus = 3
+            this.$notify({
+              title: '上传成功',
+              message: '',
+              type: 'success'
+            })
+            // 可以捕获事件
+          }).catch((err) => {
+// 为了防止 签名未确认等其他情况。
+            console.log(err)
+            this.$notify.error({
+              title: '出现错误',
+              message: '签名未确认或上传过程中出现了错误，请重试'
+            })
           })
-        } else {
-          this.$message.error('请确认是否所有信息输入完整！')
-          return false
         }
-        // 后续的操作；
       })
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
+      this.applyStatus = 1
     }
   }
 }
@@ -151,6 +182,11 @@ export default {
 	width:100%;
 	margin:50px 0 36px 0;
 	/* margin:20px auto; */
+}
+
+.link{
+  width: 360px;
+  margin: 20px auto;
 }
 
 @keyframes mymove {

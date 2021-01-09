@@ -1,9 +1,16 @@
 module.exports = {
   // 本地localhost 起ganache-cli
   // truffle部署的provoider----window上面的onload事件中就不需要改了
+  // networks: {
+  //   development: {
+  //     host: 'localhost',
+  //     port: 8545,
+  //     network_id: '*'// Match any network id
+  //   }
+  // },
   networks: {
     development: {
-      host: 'localhost',
+      host: '192.168.0.117',
       port: 8545,
       network_id: '*'// Match any network id
     }

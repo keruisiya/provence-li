@@ -2,11 +2,13 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Participator from '@/pages/Participator/Participator.vue'
 import BackMain from '@/pages/BackManage/BackMain.vue'
+import Custom from '@/pages/Custom/Custom.vue'
 import Component from '@/pages/Testpage/component.vue'
 
 import BasicIndex from '@/pages/BackManage/components/BasicIndex'
 import AccountManage from '@/pages/BackManage/components/AccountManage'
 import AccountConfirm from '@/pages/BackManage/components/AccountConfirm'
+import DataManage from '@//pages/BackManage/components/DataManage'
 
 Vue.use(Router)
 
@@ -38,12 +40,21 @@ export default new Router({
           path: '/manage/AccountConfirm',
           name: 'AccountConfirm',
           component: AccountConfirm
+        },
+        {
+          path: '/manage/DataManage',
+          name: 'DataManage',
+          component: DataManage
         }
       ]
     }, {
       path: '/component',
       name: 'component',
       component: Component
+    }, {
+      path: '/custom',
+      name: 'custom',
+      component: Custom
     }
   ]
 })

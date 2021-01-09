@@ -1,7 +1,7 @@
 <!--本页为左侧下拉菜单-->
 <template>
   <el-aside ref='aside' >
-    <el-row class="tac">
+    <el-row>
       <el-col :span="24">
         <el-menu
           default-active=""
@@ -11,7 +11,7 @@
           unique-opened
           router
           active-text-color="#fff"
-          style="overflow:auto;height:905px"
+          style="overflow:auto;height:800px"
           :collapse="collapse"
         >
           <el-menu-item index="index" @click="clickMenu('index')" align="left">
@@ -118,10 +118,6 @@ export default {
 </script>
 
 <style scoped>
-  .tac{
-    height:800px;
-
-  }
   .over-hide{
     overflow-x:hidden;
   }

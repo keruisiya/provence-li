@@ -3,7 +3,7 @@ pragma solidity ^0.4.17;
 contract Utils {
 
     // 生成随机，用来取余数得
-    uint modulus = 10 ** 16;
+    uint modulus = 10 ** 5;
 
     // 判断字符串是否相等
     function isStrEqual(string _str1, string _str2) public pure  returns(bool){
@@ -15,4 +15,5 @@ contract Utils {
         uint rand = uint(keccak256(now));
         return rand % modulus;
     }
+    
 }
